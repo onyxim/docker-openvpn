@@ -12,13 +12,17 @@ services:
 #    volumes:
 #     - ./openvpn-data/conf:/etc/openvpn
 
-  rsa:
+  rsa: &base
     build:
       context: .
       dockerfile: Dockerfile
     command: ovpn_initpki
     volumes:
       - ./openvpn-data/conf:/etc/openvpn
+
+  genconfig:
+    <<: *base
+    command: ovpn_genconfig -u udp://VPN.SERVERNAME.COM
 
 
 volumes:
