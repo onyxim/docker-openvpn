@@ -1,23 +1,24 @@
 version: '3'
 services:
-  openvpn:
-    cap_add:
-     - NET_ADMIN
-    build:
-      dockerfile: Dockerfile
-    container_name: openvpn
-    ports:
-     - "1194:1194/udp"
-    restart: always
-    volumes:
-     - ./openvpn-data/conf:/etc/openvpn
+#  openvpn:
+#    cap_add:
+#     - NET_ADMIN
+#    build:
+#      dockerfile: Dockerfile
+#    container_name: openvpn
+#    ports:
+#     - "1194:1194/udp"
+#    restart: always
+#    volumes:
+#     - ./openvpn-data/conf:/etc/openvpn
 
   rsa:
     build:
       context: .
-      dockerfile: ./rsa/Dockerfile
+      dockerfile: Dockerfile
+    command: ovpn_initpki
     volumes:
-      -
+      - ./openvpn-data/conf:/etc/openvpn
 
 
 volumes:
