@@ -18,11 +18,16 @@ services:
       dockerfile: Dockerfile
     command: ovpn_initpki
     volumes:
-      - ./openvpn-data/conf:/etc/openvpn
+      - local_conf:/etc/openvpn
 
   genconfig:
     <<: *base
     command: ovpn_genconfig -u udp://VPN.SERVERNAME.COM
+
+  client:
+    <<: *base
+    command: easyrsa build-client-full CLIENTNAME nopass
+
 
 
 volumes:
