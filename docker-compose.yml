@@ -12,6 +12,13 @@ services:
     volumes:
      - ./openvpn-data/conf:/etc/openvpn
 
-  create
+  rsa:
+    build:
+      context: .
+      dockerfile: ./rsa/Dockerfile
+    volumes:
+      -
+
+
 volumes:
   openvpn:
