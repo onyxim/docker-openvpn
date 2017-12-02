@@ -12,23 +12,19 @@ services:
 #    volumes:
 #     - ./openvpn-data/conf:/etc/openvpn
 
-  rsa: &base
+  cmd: &base
     build:
       context: .
       dockerfile: Dockerfile
-    command: ovpn_initpki
     volumes:
-      - local_conf:/etc/openvpn
+      - ./confs/${CONF_NAME}:/etc/openvpn
 
-  genconfig:
+  genconf:
+  # Use it with "docker-compose run genconf"
+  # Make sure that you have properly filled with data .env file
     <<: *base
-    command: ovpn_genconfig -u udp://VPN.SERVERNAME.COM
+    command: ovpn_genconfig -u ${SERVER_NAME}
 
   client:
     <<: *base
     command: easyrsa build-client-full CLIENTNAME nopass
-
-
-
-volumes:
-  openvpn:
