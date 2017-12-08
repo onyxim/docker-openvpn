@@ -4,6 +4,7 @@ services:
     cap_add:
      - NET_ADMIN
     build:
+
       dockerfile: Dockerfile
     container_name: openvpn
     ports:
@@ -18,6 +19,15 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./confs/${CONF_NAME}:/etc/openvpn
+
+  openvpn:
+    <<: *base
+    cap_add:
+     - NET_ADMIN
+    container_name: openvpn
+    ports:
+     - "1194:1194/udp"
+    restart: always
 
   genconf:
   # Use it with "docker-compose run genconf"
