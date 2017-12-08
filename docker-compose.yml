@@ -1,16 +1,16 @@
 version: '3'
 services:
-#  openvpn:
-#    cap_add:
-#     - NET_ADMIN
-#    build:
-#      dockerfile: Dockerfile
-#    container_name: openvpn
-#    ports:
-#     - "1194:1194/udp"
-#    restart: always
-#    volumes:
-#     - ./openvpn-data/conf:/etc/openvpn
+  openvpn:
+    cap_add:
+     - NET_ADMIN
+    build:
+      dockerfile: Dockerfile
+    container_name: openvpn
+    ports:
+     - "1194:1194/udp"
+    restart: always
+    volumes:
+     - ./confs/${CONF_NAME}:/etc/openvpn
 
   cmd: &base
     build:
@@ -25,6 +25,16 @@ services:
     <<: *base
     command: ovpn_genconfig -u ${SERVER_NAME}
 
+  initpki:
+  # Use it with "docker-compose run genconf"
+  # Make sure that you have properly filled with data .env file
+    <<: *base
+    command: ovpn_initpki
+
   client:
     <<: *base
-    command: easyrsa build-client-full CLIENTNAME nopass
+    command: easyrsa build-client-full ${CLIENT_NAME}
+
+  getclient:
+    <<: *base
+    command: easyrsa build-client-full ${CLIENT_NAME}
