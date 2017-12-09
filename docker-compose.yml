@@ -32,6 +32,14 @@ services:
     <<: *base
     command: easyrsa build-client-full ${CLIENT_NAME}
 
+  client_nopass:
+    <<: *base
+    command: easyrsa build-client-full ${CLIENT_NAME} nopass
+
   getclient:
     <<: *base
-    command: easyrsa build-client-full ${CLIENT_NAME}
+    command: ovpn_getclient ${CLIENT_NAME} >> /etc/openvpn/${CLIENT_NAME}.ovpn
+
+  copykeys:
+    <<: *base
+    command: ovpn_copy_server_files
