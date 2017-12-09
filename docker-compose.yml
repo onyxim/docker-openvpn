@@ -38,7 +38,7 @@ services:
 
   getclient:
     <<: *base
-    command: ovpn_getclient ${CLIENT_NAME} >> /etc/openvpn/${CLIENT_NAME}.ovpn
+    command: ovpn_getclient ${CLIENT_NAME} >> /etc/openvpn/clients/${CLIENT_NAME}.ovpn
 
   copykeys:
     <<: *base
