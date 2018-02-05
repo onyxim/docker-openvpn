@@ -1,14 +1,16 @@
 version: '3'
 services:
-  cmd: &base
-    build:
-      context: .
-      dockerfile: Dockerfile
+  base:
+    build: .
+    image: ${COMPOSE_PROJECT_NAME}_base
+
+  cmd: &cmd
+    image: ${COMPOSE_PROJECT_NAME}_base
     volumes:
-      - ./confs/${CONF_NAME}:/etc/openvpn
+      - ./confs/server/${CONF_NAME}:/etc/openvpn
 
   openvpn:
-    <<: *base
+    <<: *cmd
     cap_add:
      - NET_ADMIN
     container_name: openvpn
@@ -19,27 +21,27 @@ services:
   genconf:
   # Use it with "docker-compose run genconf"
   # Make sure that you have properly filled with data .env file
-    <<: *base
+    <<: *cmd
     command: ovpn_genconfig -u ${SERVER_NAME}
 
   initpki:
   # Use it with "docker-compose run genconf"
   # Make sure that you have properly filled with data .env file
-    <<: *base
+    <<: *cmd
     command: ovpn_initpki
 
   client:
-    <<: *base
+    <<: *cmd
     command: easyrsa build-client-full ${CLIENT_NAME}
 
   client_nopass:
-    <<: *base
+    <<: *cmd
     command: easyrsa build-client-full ${CLIENT_NAME} nopass
 
   getclient:
-    <<: *base
+    <<: *cmd
     command: ovpn_getclient ${CLIENT_NAME} >> /etc/openvpn/clients/${CLIENT_NAME}.ovpn
 
   copykeys:
-    <<: *base
+    <<: *cmd
     command: ovpn_copy_server_files
