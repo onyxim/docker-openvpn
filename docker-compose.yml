@@ -7,7 +7,7 @@ services:
   cmd: &cmd
     image: ${COMPOSE_PROJECT_NAME}_base
     volumes:
-      - ./confs/server/${CONF_NAME}:/etc/openvpn
+      - ./confs/${CONF_NAME}:/etc/openvpn
 
   openvpn:
     <<: *cmd
