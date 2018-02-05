@@ -40,7 +40,12 @@ services:
 
   getclient:
     <<: *cmd
-    command: ovpn_getclient ${CLIENT_NAME} >> /etc/openvpn/clients/${CLIENT_NAME}.ovpn
+    command: ovpn_getclient ${CLIENT_NAME} combined >> /etc/openvpn/clients/${CLIENT_NAME}.ovpn
+
+  getclient_all:
+  # Use this to get all confs for clients
+    <<: *cmd
+    command: ovpn_getclient_all
 
   copykeys:
     <<: *cmd
